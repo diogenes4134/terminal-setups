@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { CURSORS, FONTS, PROMPTS, SIZE, THEMES } from '../data/lab';
 
 /** Un diseño del laboratorio: lo que se exporta y lo que se comparte. */
@@ -14,6 +15,20 @@ export const DEFAULT_DESIGN: Design = { theme: 'gruvbox', font: 'jetbrains', pro
 const SOURCES = { theme: THEMES, font: FONTS, prompt: PROMPTS, cursor: CURSORS };
 
 const isKey = <T extends object>(src: T, k: unknown): k is keyof T => typeof k === 'string' && Object.hasOwn(src, k);
+
+const keysOf = <T extends object>(o: T) => Object.keys(o) as [keyof T & string, ...(keyof T & string)[]];
+
+/**
+ * Validación estricta para la API: a diferencia de `normalizeDesign`, rechaza
+ * cualquier valor desconocido en lugar de sustituirlo.
+ */
+export const designSchema = z.strictObject({
+  theme: z.enum(keysOf(THEMES)),
+  font: z.enum(keysOf(FONTS)),
+  prompt: z.enum(keysOf(PROMPTS)),
+  cursor: z.enum(keysOf(CURSORS)),
+  size: z.number().int().min(SIZE.min).max(SIZE.max),
+}) satisfies z.ZodType<Design>;
 
 /**
  * Construye un diseño válido a partir de datos sin validar (query params, JSON…).

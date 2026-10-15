@@ -16,6 +16,23 @@ export let fmt: ExportFormat = 'kitty';
 export const currentExport = () => exportConfig(lab, fmt);
 export const shareUrl = () => `${location.origin}/?${designToParams(lab)}#lab`;
 
+// enlaces cortos ya pedidos en esta visita, por diseño: no repetir la petición
+const shortLinks = new Map<string, Promise<string>>();
+
+/** Guarda el diseño en el servidor y devuelve /s/<id>. Si la API falla, el enlace largo de siempre. */
+export function shortLink(): Promise<string> {
+  const key = designToParams(lab).toString();
+  let link = shortLinks.get(key);
+  if (!link) {
+    link = fetch('/api/designs', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(lab) })
+      .then(res => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
+      .then((data: { url: string }) => data.url)
+      .catch(() => { shortLinks.delete(key); return shareUrl(); });
+    shortLinks.set(key, link);
+  }
+  return link;
+}
+
 export function renderLab() {
   const th = THEMES[lab.theme], f = FONTS[lab.font];
   const [top, pre] = PROMPTS[lab.prompt].make();

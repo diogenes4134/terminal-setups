@@ -4,7 +4,7 @@ import { closeCmdk, initCmdk, isCmdkOpen, openCmdk, runCmdk } from './cmdk';
 import { copyInstall } from './clipboard';
 import { $, $$, state } from './dom';
 import { bindTerm, initHero, initReveal } from './effects';
-import { currentExport, initLab, setFormat, setLab, shareUrl } from './lab';
+import { currentExport, initLab, setFormat, setLab, shortLink } from './lab';
 import { applyFilter, selectTab, stepSetup } from './navigation';
 import { initTheme, isCRT, setCRT, toggleTheme } from './theme';
 
@@ -57,7 +57,7 @@ document.addEventListener('click', e => {
 
   if (el.matches('button.copy')) {
     const text = el.dataset.copy === 'lab' ? currentExport()
-      : el.dataset.copy === 'link' ? shareUrl()
+      : el.dataset.copy === 'link' ? shortLink()
       : $('pre', el.closest('.install')!).textContent ?? '';
     copyInstall(el, text);
   }

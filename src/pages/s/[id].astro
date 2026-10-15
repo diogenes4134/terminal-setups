@@ -1,0 +1,24 @@
+---
+import Home from '../../components/Home.astro';
+import { db } from '../../db/client';
+import Base from '../../layouts/Base.astro';
+import { designLabel } from '../../lib/design';
+import { getDesign } from '../../server/designs';
+
+export const prerender = false;
+
+const design = await getDesign(db, Astro.params.id ?? '', { countView: true });
+// /404 es estática y Astro no permite reescribir hacia ella desde una ruta del servidor;
+// con una respuesta 404 vacía, Astro sirve la página 404 personalizada
+if (!design) return new Response(null, { status: 404, statusText: 'Not Found' });
+
+const label = designLabel(design);
+---
+
+<Base title={`${label} · Terminal Setups`} description={`Diseño de terminal compartido: ${label}. Ábrelo en el laboratorio y exporta la configuración para kitty, Alacritty o Ghostty.`}>
+  <Home design={design} />
+</Base>
+<script>
+  // al abrir un enlace compartido, ir directo al laboratorio
+  if (!location.hash) document.getElementById('lab')?.scrollIntoView();
+</script>

@@ -12,10 +12,14 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/vercel": "^11.0.15",
     "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/geist-mono": "^5.3.0",
     "@fontsource/fira-code": "^5.3.0",
@@ -24,11 +28,15 @@
     "@fontsource/jetbrains-mono": "^5.3.0",
     "@fontsource/source-code-pro": "^5.3.1",
     "@fontsource/victor-mono": "^5.3.0",
-    "astro": "^7.4.0"
+    "@libsql/client": "^0.18.0",
+    "astro": "^7.4.0",
+    "drizzle-orm": "^0.45.4",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@playwright/test": "^1.64.1",
+    "drizzle-kit": "^0.31.11",
     "typescript": "^6.0.3"
   }
 }
