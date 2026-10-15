@@ -4,7 +4,7 @@ import { esc } from '../lib/term';
 import { $, SETUPS_INDEX, behavior } from './dom';
 import { setLab } from './lab';
 import { applyFilter, goTo, stepSetup } from './navigation';
-import { isCRT, setCRT, toggleTheme } from './theme';
+import { isCRT, setCRT } from './crt';
 
 /* ══════════ paleta de comandos ══════════ */
 interface Command { group: string; label: string; hint?: string; run: () => void }
@@ -21,7 +21,6 @@ function commands(): Command[] {
     { group: 'Ir a', label: 'Índice', run: () => goTo('indice') },
     { group: 'Ir a', label: 'Laboratorio', run: () => goTo('lab') },
     { group: 'Ir a', label: 'Volver arriba', run: () => scrollTo({ top: 0, behavior }) },
-    { group: 'Acciones', label: 'Cambiar tema claro / oscuro', hint: 'T', run: () => toggleTheme() },
     { group: 'Acciones', label: `${isCRT() ? 'Desactivar' : 'Activar'} modo CRT`, hint: 'C', run: () => setCRT(!isCRT()) },
     { group: 'Acciones', label: 'Siguiente configuración', hint: 'J', run: () => stepSetup(1) },
     { group: 'Acciones', label: 'Configuración anterior', hint: 'K', run: () => stepSetup(-1) },

@@ -3,16 +3,17 @@ import type { ExportFormat } from '../lib/export';
 import { closeCmdk, initCmdk, isCmdkOpen, openCmdk, runCmdk } from './cmdk';
 import { copyInstall } from './clipboard';
 import { $, $$, state } from './dom';
-import { bindTerm, initHero, initReveal } from './effects';
+import { bindTerm, initReveal } from './effects';
+import { initHorizon } from './horizon';
+import { runIntro } from './intro';
 import { currentExport, initLab, setFormat, setLab, shortLink } from './lab';
 import { applyFilter, selectTab, stepSetup } from './navigation';
-import { initTheme, isCRT, setCRT, toggleTheme } from './theme';
+import { isCRT, setCRT } from './crt';
 
 /* ══════════ arranque ══════════ */
-initTheme();
 setCRT(isCRT(), true);
 if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) $$('kbd').forEach(k => { if (k.textContent === 'Ctrl K') k.textContent = '⌘ K'; });
-initHero();
+runIntro(initHorizon($<HTMLCanvasElement>('#horizon')));
 initReveal();
 applyFilter('all');
 initLab();
@@ -27,7 +28,6 @@ document.addEventListener('keydown', e => {
   const target = e.target as HTMLElement;
   if (/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName) || target.isContentEditable) return;
   if (k === '/' || e.key === '?') { e.preventDefault(); openCmdk(); }
-  else if (k === 't') toggleTheme();
   else if (k === 'c') setCRT(!isCRT());
   else if (k === 'j') stepSetup(1);
   else if (k === 'k') stepSetup(-1);
@@ -38,7 +38,6 @@ document.addEventListener('click', e => {
   const el = (e.target as Element).closest<HTMLElement>('button, .item, [data-close]');
   if (!el) return;
 
-  if (el.id === 'themeBtn') return toggleTheme(e.clientX || null, e.clientY || null);
   if (el.id === 'crtBtn') return setCRT(!isCRT());
   if (el.id === 'cmdkBtn') return openCmdk();
   if (el.matches('[data-close]')) return closeCmdk();
