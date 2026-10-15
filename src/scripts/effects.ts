@@ -37,9 +37,12 @@ export function initReveal() {
   }), { rootMargin: '-45% 0px -50% 0px' });
   ['indice', 'setups', 'lab'].forEach(id => spy.observe(document.getElementById(id)!));
 
-  // la barra fija aparece cuando la cabecera del hero sale de pantalla
+  // la barra superior gana un borde en cuanto la página deja de estar arriba del todo
   const topbar = $('#topbar');
-  new IntersectionObserver(([e]) => topbar.classList.toggle('on', !e?.isIntersecting)).observe($('.masthead'));
+  const sentinel = document.createElement('div');
+  sentinel.style.cssText = 'position:absolute;top:0;height:1px;width:1px';
+  document.body.prepend(sentinel);
+  new IntersectionObserver(([e]) => topbar.classList.toggle('scrolled', !e?.isIntersecting)).observe(sentinel);
 }
 
 /* ══════════ terminales: foco de luz + inclinación 3D ══════════ */

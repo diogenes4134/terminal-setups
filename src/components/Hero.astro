@@ -1,7 +1,12 @@
 ---
-// solo se separan con espacio normal las dos frases: es el único punto donde puede partirse la línea
-const nb = (s: string) => s.replaceAll(' ', ' ');
-const subhead = `${nb('Nueve terminales recreadas en código.')} ${nb('Y un laboratorio para la tuya.')}`;
+import { THEMES } from '../data/lab';
+import { SETUPS } from '../data/setups';
+import { DEMO_PROMPTS, DEMO_THEMES, demoCommand, demoLines, themeVars } from '../lib/demo';
+import { renderLines } from '../lib/term';
+
+// primer estado de la demo, ya pintado en el HTML (se ve aunque no haya JavaScript)
+const first = DEMO_THEMES[0]!;
+const lines = renderLines(demoLines(first, DEMO_PROMPTS[0]!, demoCommand(first), true));
 ---
 
 <script is:inline>
@@ -15,30 +20,34 @@ const subhead = `${nb('Nueve terminales recreadas en código.')} ${nb('Y un labo
 </script>
 
 <section class="hero" id="hero">
-  <header class="masthead">
-    <a class="wordmark" href="#top" aria-label="Terminal Setups, inicio">~/<b>setups</b></a>
-    <div class="hairline" aria-hidden="true"></div>
-    <nav aria-label="Secciones">
-      <a href="#indice" data-spy="indice">Índice</a>
-      <a href="#setups" data-spy="setups">Setups</a>
-      <a href="#lab" data-spy="lab">Laboratorio</a>
-    </nav>
-  </header>
-
-  <div class="hero-gap"></div>
-
   <div class="copy">
+    <p class="eyebrow">{SETUPS.length} configuraciones · un laboratorio</p>
     <h1 class="headline" id="title">
       <span class="l"><span class="li">Tu terminal,</span></span>
       <span class="l"><span class="li">con estilo propio.</span></span>
     </h1>
-    <p class="subhead">{subhead}</p>
-    <a class="btn" href="#lab">Abrir el laboratorio</a>
-    <a class="discover" href="#indice">
-      Ver las configuraciones
-      <svg viewBox="0 0 11 12.6" aria-hidden="true"><path d="M5.5 .4V12M1 7.5L5.5 12L10 7.5" /></svg>
-    </a>
+    <p class="subhead">
+      Configuraciones reales de kitty, WezTerm, Ghostty y compañía, recreadas en código.
+      Elige una, cópiala o diseña la tuya en el laboratorio.
+    </p>
+    <div class="actions">
+      <a class="btn" href="#lab">Abrir el laboratorio</a>
+      <a class="btn btn-ghost" href="#indice">Ver las configuraciones</a>
+    </div>
+    <p class="note">Sin capturas: cada terminal es HTML y CSS.</p>
   </div>
 
-  <div class="field" aria-hidden="true"><canvas id="horizon"></canvas></div>
+  <figure class="demo" aria-label="Demostración: una terminal que va cambiando de tema">
+    <div class="term demo-term" id="demoTerm" style={`${themeVars(first)};--font:'JetBrains Mono', monospace`}>
+      <div class="term-bar"><span class="dots"><i></i><i></i><i></i></span><span class="term-title" id="demoTitle">{THEMES[first].name} — zsh</span></div>
+      <div class="term-body"><div class="lines" id="demoLines" set:html={lines} /></div>
+    </div>
+    <figcaption class="demo-themes" id="demoThemes">
+      {DEMO_THEMES.map((k, i) => (
+        <button data-theme={k} aria-pressed={i === 0} aria-label={`Ver el tema ${THEMES[k].name}`} title={THEMES[k].name}
+          style={`--a:${THEMES[k].bg};--b:${THEMES[k].ansi[5]};--c:${THEMES[k].ansi[2]}`}></button>
+      ))}
+      <a class="demo-lab" href="#lab" id="demoLab">Probar en el laboratorio →</a>
+    </figcaption>
+  </figure>
 </section>

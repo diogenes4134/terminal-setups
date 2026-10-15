@@ -4,7 +4,7 @@ import { closeCmdk, initCmdk, isCmdkOpen, openCmdk, runCmdk } from './cmdk';
 import { copyInstall } from './clipboard';
 import { $, $$, state } from './dom';
 import { bindTerm, initReveal } from './effects';
-import { initHorizon } from './horizon';
+import { initDemo } from './demo';
 import { runIntro } from './intro';
 import { currentExport, initLab, setFormat, setLab, shortLink } from './lab';
 import { applyFilter, selectTab, stepSetup } from './navigation';
@@ -13,10 +13,11 @@ import { isCRT, setCRT } from './crt';
 /* ══════════ arranque ══════════ */
 setCRT(isCRT(), true);
 if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) $$('kbd').forEach(k => { if (k.textContent === 'Ctrl K') k.textContent = '⌘ K'; });
-runIntro(initHorizon($<HTMLCanvasElement>('#horizon')));
+runIntro();
 initReveal();
 applyFilter('all');
 initLab();
+initDemo();
 $$('.term').forEach(bindTerm);
 initCmdk();
 
