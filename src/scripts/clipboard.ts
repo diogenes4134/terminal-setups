@@ -14,7 +14,11 @@ export function flash(button: HTMLElement, label: string, cls: 'ok' | 'err') {
 }
 
 export async function copyInstall(button: HTMLElement, text: string) {
-  // TODO(human): copia `text` al portapapeles y avisa al usuario con flash().
-  //   Éxito → flash(button, 'Copiado ✓', 'ok')
-  //   Fallo → flash(button, 'Error', 'err')
+  try {
+    // falla si la página no es segura (HTTPS/localhost), sin permiso o en navegadores sin la API
+    await navigator.clipboard.writeText(text);
+    flash(button, 'Copiado ✓', 'ok');
+  } catch {
+    flash(button, 'Error', 'err');
+  }
 }
