@@ -1,0 +1,43 @@
+---
+import { THEMES } from '../data/lab';
+import { SETUPS } from '../data/setups';
+import { TOOLS } from '../data/site';
+
+// palabras del título: cada una se anima por separado (`--i` escalona la entrada)
+const words: { text: string; serif: boolean }[] = [
+  ...['Tu', 'terminal,'].map(text => ({ text, serif: false })),
+  ...['con', 'estilo'].map(text => ({ text, serif: true })),
+  { text: 'propio.', serif: false },
+];
+const stats = [
+  [SETUPS.length, 'configuraciones'],
+  [TOOLS.length, 'herramientas'],
+  [Object.keys(THEMES).length, 'temas en el lab'],
+] as const;
+---
+
+<section class="hero" id="hero">
+  <div class="blob-wrap" id="blob" aria-hidden="true"><div class="blob"></div></div>
+  <div class="wrap">
+    <span class="pill"><span class="dot"></span><span>{SETUPS.length} configuraciones · laboratorio en vivo</span></span>
+    <h1 id="title" aria-label="Tu terminal, con estilo propio.">
+      {words.map((w, i) => (
+        <>
+          <span class:list={['w', { serif: w.serif }]} style={`--i:${i}`} aria-hidden="true">{w.text}</span>{' '}
+        </>
+      ))}
+    </h1>
+    <div class="typer" aria-hidden="true"><b>$</b><span id="typed"></span><span class="caret"></span></div>
+    <div class="stats" data-reveal>
+      {stats.map(([n, label]) => <div><strong data-count={n}>00</strong><span>{label}</span></div>)}
+      <div><strong>00</strong><span>imágenes (todo CSS)</span></div>
+    </div>
+    <p class="hint">Pulsa <kbd>Ctrl K</kbd> para buscar · <kbd>T</kbd> tema · <kbd>C</kbd> modo CRT · <kbd>J</kbd>/<kbd>K</kbd> navegar</p>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    {[...TOOLS, ...TOOLS].map(tool => <span>{tool}</span>)}
+  </div>
+</div>

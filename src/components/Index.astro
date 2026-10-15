@@ -1,0 +1,34 @@
+---
+import { SETUPS, VIBES } from '../data/setups';
+import { pad } from '../lib/term';
+
+const counts = Object.keys(VIBES).map(k => (k === 'all' ? SETUPS.length : SETUPS.filter(s => (s.vibes as string[]).includes(k)).length));
+---
+
+<section class="index wrap" id="indice" data-reveal>
+  <span class="label">Índice</span>
+  <h2>Nueve formas de vivir en la <span class="serif">línea de comandos</span>.</h2>
+  <div class="filter-row">
+    <div class="filters" id="filters" role="toolbar" aria-label="Filtrar por estilo">
+      {Object.entries(VIBES).map(([k, v], i) => (
+        <button class="chip" data-v={k} aria-pressed={k === 'all'}>{v}<sup>{counts[i]}</sup></button>
+      ))}
+    </div>
+    <span class="count" id="count">{pad(SETUPS.length)} / {pad(SETUPS.length)}</span>
+  </div>
+  <ol id="toc">
+    {SETUPS.map((s, i) => (
+      <li data-id={s.id} style={`--vtl:l-${s.id}`}>
+        <a href={`#${s.id}`}>
+          <span class="n">{pad(i + 1)}</span>
+          <span class="name">{s.name}</span>
+          <span class="meta">
+            <span class="mini">{s.swatches.slice(2, 8).map((h, k) => <i style={`--s:${h};--k:${k}`}></i>)}</span>
+            <span class="tag">{s.tag}</span>
+            <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </span>
+        </a>
+      </li>
+    ))}
+  </ol>
+</section>

@@ -31,7 +31,7 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0; overflow-x: hidden;
   background: var(--page); color: var(--text);
-  font: 400 16px/1.6 Geist, system-ui, sans-serif;
+  font: 400 16px/1.6 'Geist Variable', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 /* grano de película */
@@ -41,14 +41,14 @@ body::after {
 }
 ::selection { background: var(--text); color: var(--page); }
 a { color: inherit; }
-code, .mono { font-family: 'Geist Mono', ui-monospace, monospace; font-size: .86em; }
+code, .mono { font-family: 'Geist Mono Variable', ui-monospace, monospace; font-size: .86em; }
 kbd {
-  font: 500 11px 'Geist Mono', monospace; color: var(--muted);
+  font: 500 11px 'Geist Mono Variable', monospace; color: var(--muted);
   border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 1px 5px; background: var(--card);
 }
 .serif { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; letter-spacing: -.01em; }
 .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
-.label { font: 500 12px 'Geist Mono', monospace; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.label { font: 500 12px 'Geist Mono Variable', monospace; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
 .desc { color: var(--muted); margin: 12px 0 32px; max-width: 60ch; }
 :focus-visible { outline: 2px solid var(--text); outline-offset: 3px; border-radius: 6px; }
 
@@ -73,10 +73,10 @@ html.vt #toc li { view-transition-name: var(--vtl); }
   background: var(--glass); backdrop-filter: blur(14px) saturate(1.4); -webkit-backdrop-filter: blur(14px) saturate(1.4);
   width: max-content; max-width: calc(100% - 32px);
 }
-.nav .logo { font: 500 13px 'Geist Mono', monospace; text-decoration: none; margin-right: 8px; white-space: nowrap; }
+.nav .logo { font: 500 13px 'Geist Mono Variable', monospace; text-decoration: none; margin-right: 8px; white-space: nowrap; }
 .nav .links { display: flex; gap: 2px; }
 .nav .links a {
-  font: 500 13px Geist, sans-serif; color: var(--muted); text-decoration: none;
+  font: 500 13px 'Geist Variable', sans-serif; color: var(--muted); text-decoration: none;
   padding: 6px 12px; border-radius: 999px; transition: color .2s, background .2s;
 }
 .nav .links a:hover, .nav .links a.active { color: var(--text); background: var(--soft); }
@@ -125,7 +125,7 @@ html.vt #toc li { view-transition-name: var(--vtl); }
 
 .pill {
   display: inline-flex; align-items: center; gap: 8px;
-  font: 500 12px 'Geist Mono', monospace; color: var(--muted);
+  font: 500 12px 'Geist Mono Variable', monospace; color: var(--muted);
   border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px 5px 10px; background: var(--card);
 }
 .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: ping 2s infinite; }
@@ -138,7 +138,7 @@ h1 .serif { letter-spacing: -.02em; }
 
 .typer {
   display: inline-flex; align-items: center; gap: 10px; max-width: 100%;
-  font: 400 14px 'Geist Mono', monospace; color: var(--muted);
+  font: 400 14px 'Geist Mono Variable', monospace; color: var(--muted);
   padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--card);
 }
 .typer b { color: var(--text); font-weight: 500; }
@@ -165,7 +165,7 @@ h1 .serif { letter-spacing: -.02em; }
 }
 .track { display: flex; width: max-content; animation: scroll 60s linear infinite; }
 .marquee:hover .track { animation-play-state: paused; }
-.track span { font: 400 14px 'Geist Mono', monospace; color: var(--muted); padding: 0 22px; white-space: nowrap; transition: color .2s; }
+.track span { font: 400 14px 'Geist Mono Variable', monospace; color: var(--muted); padding: 0 22px; white-space: nowrap; transition: color .2s; }
 .track span:hover { color: var(--text); }
 .track span::after { content: "✦"; margin-left: 44px; opacity: .4; }
 @keyframes scroll { to { transform: translateX(-50%); } }
@@ -176,7 +176,7 @@ h1 .serif { letter-spacing: -.02em; }
 .filter-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
 .filters { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip {
-  font: 500 13px Geist, sans-serif; color: var(--muted); cursor: pointer;
+  font: 500 13px 'Geist Variable', sans-serif; color: var(--muted); cursor: pointer;
   border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 6px 14px;
   display: inline-flex; align-items: center; gap: 8px;
   transition: color .2s, background .25s, border-color .2s, transform .2s var(--ease);
@@ -184,8 +184,8 @@ h1 .serif { letter-spacing: -.02em; }
 .chip:hover { color: var(--text); border-color: var(--muted); }
 .chip:active { transform: scale(.95); }
 .chip[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
-.chip sup { font: 500 10px 'Geist Mono', monospace; opacity: .6; }
-.count { font: 500 12px 'Geist Mono', monospace; color: var(--muted); }
+.chip sup { font: 500 10px 'Geist Mono Variable', monospace; opacity: .6; }
+.count { font: 500 12px 'Geist Mono Variable', monospace; color: var(--muted); }
 
 .index ol { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 .index li[hidden], section.setup[hidden] { display: none; }
@@ -193,7 +193,7 @@ h1 .serif { letter-spacing: -.02em; }
   display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 12px;
   padding: 18px 0; border-bottom: 1px solid var(--line); text-decoration: none;
 }
-.index .n { font: 500 12px 'Geist Mono', monospace; color: var(--muted); }
+.index .n { font: 500 12px 'Geist Mono Variable', monospace; color: var(--muted); }
 .index .name { font-size: clamp(18px, 3vw, 24px); letter-spacing: -.02em; transition: transform .5s var(--ease); }
 .index .meta { display: flex; align-items: center; gap: 14px; }
 .index .tag { font-size: 13px; color: var(--muted); }
@@ -216,9 +216,9 @@ section.setup { padding: 96px 0 16px; scroll-margin-top: 40px; }
 .in .rule::after { transform: scaleX(1); }
 .setup-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .setup h3 { font-size: clamp(26px, 4.4vw, 40px); font-weight: 500; letter-spacing: -.035em; line-height: 1.1; margin: 0; }
-.badge { font: 500 11px 'Geist Mono', monospace; color: var(--page); background: var(--text); border-radius: 999px; padding: 4px 10px; }
+.badge { font: 500 11px 'Geist Mono Variable', monospace; color: var(--page); background: var(--text); border-radius: 999px; padding: 4px 10px; }
 .vibes { display: flex; gap: 6px; }
-.vibes span { font: 500 11px 'Geist Mono', monospace; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; }
+.vibes span { font: 500 11px 'Geist Mono Variable', monospace; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; }
 
 /* ══════════ terminal recreada ══════════ */
 .term {
@@ -240,7 +240,7 @@ section.setup { padding: 96px 0 16px; scroll-margin-top: 40px; }
 .term-bar {
   display: flex; align-items: center; gap: 8px; padding: 10px 14px; min-height: 37px;
   background: var(--bar, rgba(255,255,255,.035)); border-bottom: 1px solid rgba(255,255,255,.06);
-  font: 12px/1 Geist, sans-serif; color: var(--fg);
+  font: 12px/1 'Geist Variable', sans-serif; color: var(--fg);
 }
 .dots { display: flex; gap: 6px; }
 .dots i { width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,.16); transition: background .3s; }
@@ -252,17 +252,17 @@ section.setup { padding: 96px 0 16px; scroll-margin-top: 40px; }
 .chrome-gnome .term-bar { background: var(--bar, rgba(255,255,255,.06)); }
 .chrome-gnome .term-title { margin-left: 52px; font-weight: 600; opacity: .85; }
 .gnome-ctl { display: flex; gap: 8px; }
-.gnome-ctl i { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,.1); display: grid; place-items: center; font: normal 12px/1 Geist, sans-serif; }
+.gnome-ctl i { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,.1); display: grid; place-items: center; font: normal 12px/1 'Geist Variable', sans-serif; }
 .chrome-win { --radius: 8px; }
 .chrome-win .term-bar { padding: 0 0 0 8px; gap: 0; background: var(--bar, rgba(255,255,255,.04)); }
 .win-tab {
   display: flex; align-items: center; gap: 8px; padding: 9px 14px; margin-top: 6px;
   background: var(--bg); border-radius: 6px 6px 0 0; font-size: 12px; white-space: nowrap;
 }
-.win-tab::before { content: ">_"; font: 700 10px 'Geist Mono', monospace; opacity: .7; }
+.win-tab::before { content: ">_"; font: 700 10px 'Geist Mono Variable', monospace; opacity: .7; }
 .win-plus { padding: 0 14px; opacity: .6; font-size: 14px; }
 .win-ctl { margin-left: auto; display: flex; }
-.win-ctl i { width: 44px; height: 37px; display: grid; place-items: center; font: normal 12px/1 Geist, sans-serif; opacity: .8; }
+.win-ctl i { width: 44px; height: 37px; display: grid; place-items: center; font: normal 12px/1 'Geist Variable', sans-serif; opacity: .8; }
 .term:hover .win-ctl i:last-child { background: #c42b1c; color: #fff; opacity: 1; }
 
 .term-body {
@@ -317,7 +317,7 @@ section.setup { padding: 96px 0 16px; scroll-margin-top: 40px; }
   transition: transform .3s var(--ease);
 }
 .swatches button:hover { transform: scale(1.35); }
-.hex { font: 500 12px 'Geist Mono', monospace; color: var(--muted); min-width: 64px; margin-left: 4px; }
+.hex { font: 500 12px 'Geist Mono Variable', monospace; color: var(--muted); min-width: 64px; margin-left: 4px; }
 
 .tabs { position: relative; display: grid; grid-template-columns: 1fr 1fr; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: var(--soft); }
 .tabs::before {
@@ -326,8 +326,8 @@ section.setup { padding: 96px 0 16px; scroll-margin-top: 40px; }
   transform: translateX(calc(var(--k, 0) * 100%)); transition: transform .45s var(--ease);
 }
 .tabs-3 { --n: 3; grid-template-columns: repeat(3, 1fr); }
-.tabs button { position: relative; font: 500 13px Geist, sans-serif; color: var(--muted); background: none; border: 0; padding: 6px 16px; cursor: pointer; transition: color .3s; white-space: nowrap; }
-.tabs-3 button { font: 500 12px 'Geist Mono', monospace; padding: 5px 12px; }
+.tabs button { position: relative; font: 500 13px 'Geist Variable', sans-serif; color: var(--muted); background: none; border: 0; padding: 6px 16px; cursor: pointer; transition: color .3s; white-space: nowrap; }
+.tabs-3 button { font: 500 12px 'Geist Mono Variable', monospace; padding: 5px 12px; }
 .tabs button[aria-selected="true"] { color: var(--text); }
 
 .panel { display: none; }
@@ -345,10 +345,10 @@ dl.specs dd { font-size: 15px; }
 
 .install { border: 1px solid var(--line); border-radius: 12px; background: var(--soft); overflow: hidden; }
 .install-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 8px 8px 14px; border-bottom: 1px solid var(--line); }
-.install pre { margin: 0; padding: 16px; overflow-x: auto; font: 12.5px/1.7 'Geist Mono', ui-monospace, monospace; }
+.install pre { margin: 0; padding: 16px; overflow-x: auto; font: 12.5px/1.7 'Geist Mono Variable', ui-monospace, monospace; }
 .install .cm { color: var(--muted); }
 button.copy {
-  font: 500 12px Geist, sans-serif; color: var(--text); cursor: pointer; white-space: nowrap;
+  font: 500 12px 'Geist Variable', sans-serif; color: var(--text); cursor: pointer; white-space: nowrap;
   background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px;
   transition: transform .2s var(--ease), border-color .2s;
 }
@@ -366,7 +366,7 @@ button.copy.err { color: #dc2626; border-color: currentColor; }
 .ctl .chip { padding: 5px 12px; }
 .chip .sw { width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg, var(--a) 50%, var(--b) 50%); border: 1px solid rgba(127,127,127,.35); }
 .ctl input[type="range"] { width: min(260px, 100%); accent-color: var(--text); }
-.ctl output { font: 500 12px 'Geist Mono', monospace; color: var(--muted); margin-left: 10px; }
+.ctl output { font: 500 12px 'Geist Mono Variable', monospace; color: var(--muted); margin-left: 10px; }
 .export-actions { display: flex; gap: 6px; }
 @media (max-width: 560px) { .ctl { grid-template-columns: 1fr; gap: 6px; } }
 
@@ -384,9 +384,9 @@ button.copy.err { color: #dc2626; border-color: currentColor; }
 @keyframes popIn { from { opacity: 0; transform: scale(.96) translateY(-8px); } }
 .cmdk-input { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
 .cmdk-input svg { width: 16px; height: 16px; color: var(--muted); flex: none; }
-.cmdk-input input { flex: 1; border: 0; outline: 0; background: none; color: var(--text); font: 400 15px Geist, sans-serif; }
+.cmdk-input input { flex: 1; border: 0; outline: 0; background: none; color: var(--text); font: 400 15px 'Geist Variable', sans-serif; }
 #cmdkList { list-style: none; margin: 0; padding: 6px; max-height: 50vh; overflow-y: auto; }
-#cmdkList .grp { font: 500 11px 'Geist Mono', monospace; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; padding: 10px 10px 4px; }
+#cmdkList .grp { font: 500 11px 'Geist Mono Variable', monospace; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; padding: 10px 10px 4px; }
 #cmdkList .item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 14px; }
 #cmdkList .item[aria-selected="true"] { background: var(--soft); }
 #cmdkList .item small { color: var(--muted); font-size: 12px; white-space: nowrap; }
@@ -398,7 +398,7 @@ button.copy.err { color: #dc2626; border-color: currentColor; }
 /* ══════════ toast ══════════ */
 .toast {
   position: fixed; left: 50%; bottom: 24px; z-index: 110; translate: -50% 20px; opacity: 0; pointer-events: none;
-  font: 500 13px Geist, sans-serif; color: var(--page); background: var(--text);
+  font: 500 13px 'Geist Variable', sans-serif; color: var(--page); background: var(--text);
   padding: 9px 16px; border-radius: 999px; box-shadow: 0 10px 30px -10px rgba(0,0,0,.4);
   transition: opacity .3s var(--ease), translate .4s var(--ease);
 }

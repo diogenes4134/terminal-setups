@@ -1,0 +1,56 @@
+---
+import '@fontsource-variable/geist/wght.css';
+import '@fontsource-variable/geist-mono/wght.css';
+import '@fontsource/instrument-serif/400-italic.css';
+// fuentes de las terminales y del laboratorio (solo los pesos que se usan)
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/700.css';
+import '@fontsource/fira-code/400.css';
+import '@fontsource/fira-code/700.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/700.css';
+import '@fontsource/victor-mono/400.css';
+import '@fontsource/victor-mono/700.css';
+import '@fontsource/victor-mono/400-italic.css';
+import '@fontsource/source-code-pro/400.css';
+import '@fontsource/source-code-pro/700.css';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'Terminal Setups',
+  description = 'Configuraciones de terminal recreadas en HTML/CSS, con un laboratorio para diseñar la tuya.',
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <script is:inline>
+      // aplica tema y modo CRT guardados antes de pintar (evita el parpadeo)
+      try {
+        const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t;
+        if (localStorage.getItem('crt') === '1') document.documentElement.classList.add('crt');
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

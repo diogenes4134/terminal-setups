@@ -1,17 +1,38 @@
-/* ══════════ helpers para pintar líneas de terminal ══════════ */
-const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
-const col = k => k.startsWith('#') ? k : `var(--${k})`;
-const c = (k, text) => `<span style="color:${col(k)}">${esc(text)}</span>`;
-const b = (k, text) => `<span class="b" style="color:${col(k)}">${esc(text)}</span>`;
-const it = (k, text) => `<span class="it" style="color:${col(k)}">${esc(text)}</span>`;
-const t = text => esc(text);
-const cur = '<span class="cursor"></span>';
-const powerline = (items, round) => `<span class="segs">${items.map(([bg, fg, text], i) =>
-  `<span class="seg${i === 0 && round ? ' round' : ''}" style="--sb:${col(bg)};color:${col(fg)};z-index:${items.length - i}">${esc(text)}</span>`).join('')}</span>`;
-const segs = (...items) => powerline(items, false);
-const roundSegs = (...items) => powerline(items, true);
-const segsR = (...items) => `<span class="segs">${items.map(([bg, fg, text], i) =>
-  `<span class="seg-r" style="--sb:${col(bg)};color:${col(fg)};z-index:${i + 1}">${esc(text)}</span>`).join('')}</span>`;
+import { b, c, cur, it, roundSegs, segs, segsR, t, type Line } from '../lib/term';
+
+export interface Setup {
+  id: string;
+  name: string;
+  /** marca la configuración propia del autor */
+  mine?: boolean;
+  vibes: Vibe[];
+  tag: string;
+  desc: string;
+  /** título de la ventana */
+  window: string;
+  /** barra de ventana; por defecto, la de macOS */
+  chrome?: 'win' | 'gnome';
+  font: string;
+  /** font-feature-settings */
+  ff?: string;
+  lh?: number;
+  /** ancho del cursor */
+  cw?: string;
+  frame?: string;
+  bar?: string;
+  /** cada clave se convierte en una variable CSS de la terminal */
+  palette: Record<string, string>;
+  swatches: string[];
+  lines: Line[];
+  /** barra de estado de tmux: [izquierda (HTML), derecha] */
+  status?: [string, string];
+  /** [etiqueta, valor en HTML] */
+  specs: [string, string][];
+  install: string;
+}
+
+export const VIBES = { all: 'Todos', hacker: 'Hacker', powerline: 'Powerline', minimal: 'Minimal', pastel: 'Pastel', retro: 'Retro' };
+export type Vibe = Exclude<keyof typeof VIBES, 'all'>;
 
 /* ══════════ prompts reutilizados ══════════ */
 const guyenTop = (extra = '') =>
@@ -23,18 +44,18 @@ const p10kTop = () => c('dim', '╭─') + segs(
   ['#3a3a3a', '#ffffff', ' ◆ '],
   ['#0087af', '#ffffff', ' ~/proyectos/web '],
   ['#d7af00', '#000000', ' ⎇ main !1 ?1 ']);
-const p10kRight = time => segsR(
+const p10kRight = (time: string) => segsR(
   ['#3a3a3a', '#5faf00', ' ✔ '],
   ['#5faf00', '#000000', ' ⬢ 20.11 '],
   ['#d0d0d0', '#000000', ` ${time} `]) + c('dim', '─╮');
 
-const catTop = time => roundSegs(
+const catTop = (time: string) => roundSegs(
   ['red', 'crust', ' ◆ user '], ['peach', 'crust', ' ~/dotfiles '], ['yellow', 'crust', ' ⎇ main '],
   ['green', 'crust', ' ⬢ v22.9 '], ['lavender', 'crust', ` ◷ ${time} `]);
 
 const kaliTop = () => c('green', '┌──(') + b('blue', 'kali㉿kali') + c('green', ')-[') + b('fg', '~/htb/lame') + c('green', ']');
 
-const gruvTop = time => roundSegs(
+const gruvTop = (time: string) => roundSegs(
   ['orange', 'bg0', ' ◆ user '], ['yellow', 'bg0', ' ~/notes '], ['aqua', 'bg0', ' ⎇ main '],
   ['blue', 'bg0', ' ⬢ py 3.12 '], ['bg2', 'fg', ` ◷ ${time} `]);
 
@@ -45,7 +66,7 @@ const ompTop = () => roundSegs(
   ['#fffb38', '#193549', ' ⎇ main ≡ '], ['#6ca35e', '#ffffff', ' ⬢ 20.11 ']);
 
 /* ══════════ configuraciones ══════════ */
-const SETUPS = [
+export const SETUPS: Setup[] = [
   {
     id: 'guyen',
     name: 'Guyen · h4ck3r edition',
@@ -421,56 +442,3 @@ oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/
 # Linux/macOS: curl -s https://ohmyposh.dev/install.sh | bash -s`,
   },
 ];
-
-const VIBES = { all: 'Todos', hacker: 'Hacker', powerline: 'Powerline', minimal: 'Minimal', pastel: 'Pastel', retro: 'Retro' };
-
-/* ══════════ laboratorio: temas con los 16 colores ANSI ══════════ */
-const THEMES = {
-  ubuntu:     { name: 'Ubuntu',          bg: '#300A24', fg: '#FFFFFF', ansi: ['#1B1B1B','#CC1A12','#4E9A06','#C4A000','#3667A6','#7F5985','#06989A','#D5D5D5','#838383','#F93632','#8AE234','#FCE94F','#729FCF','#AD7FA8','#34E2E2','#EEEEEC'] },
-  catppuccin: { name: 'Catppuccin Mocha', bg: '#1e1e2e', fg: '#cdd6f4', ansi: ['#45475a','#f38ba8','#a6e3a1','#f9e2af','#89b4fa','#f5c2e7','#94e2d5','#bac2de','#585b70','#f38ba8','#a6e3a1','#f9e2af','#89b4fa','#f5c2e7','#94e2d5','#a6adc8'] },
-  tokyonight: { name: 'Tokyo Night',     bg: '#1a1b26', fg: '#c0caf5', ansi: ['#15161e','#f7768e','#9ece6a','#e0af68','#7aa2f7','#bb9af7','#7dcfff','#a9b1d6','#414868','#f7768e','#9ece6a','#e0af68','#7aa2f7','#bb9af7','#7dcfff','#c0caf5'] },
-  gruvbox:    { name: 'Gruvbox Dark',    bg: '#282828', fg: '#ebdbb2', ansi: ['#282828','#cc241d','#98971a','#d79921','#458588','#b16286','#689d6a','#a89984','#928374','#fb4934','#b8bb26','#fabd2f','#83a598','#d3869b','#8ec07c','#ebdbb2'] },
-  dracula:    { name: 'Dracula',         bg: '#282a36', fg: '#f8f8f2', ansi: ['#21222c','#ff5555','#50fa7b','#f1fa8c','#bd93f9','#ff79c6','#8be9fd','#f8f8f2','#6272a4','#ff6e6e','#69ff94','#ffffa5','#d6acff','#ff92df','#a4ffff','#ffffff'] },
-  rosepine:   { name: 'Rosé Pine',       bg: '#191724', fg: '#e0def4', ansi: ['#26233a','#eb6f92','#31748f','#f6c177','#9ccfd8','#c4a7e7','#ebbcba','#e0def4','#6e6a86','#eb6f92','#31748f','#f6c177','#9ccfd8','#c4a7e7','#ebbcba','#e0def4'] },
-  nord:       { name: 'Nord',            bg: '#2e3440', fg: '#d8dee9', ansi: ['#3b4252','#bf616a','#a3be8c','#ebcb8b','#81a1c1','#b48ead','#88c0d0','#e5e9f0','#4c566a','#bf616a','#a3be8c','#ebcb8b','#81a1c1','#b48ead','#8fbcbb','#eceff4'] },
-  campbell:   { name: 'Campbell',        bg: '#0c0c0c', fg: '#cccccc', ansi: ['#0c0c0c','#c50f1f','#13a10e','#c19c00','#0037da','#881798','#3a96dd','#cccccc','#767676','#e74856','#16c60c','#f9f1a5','#3b78ff','#b4009e','#61d6d6','#f2f2f2'] },
-};
-
-const FONTS = {
-  jetbrains: { name: 'JetBrains Mono',  css: "'JetBrains Mono', monospace" },
-  fira:      { name: 'Fira Code',       css: "'Fira Code', monospace" },
-  plex:      { name: 'IBM Plex Mono',   css: "'IBM Plex Mono', monospace" },
-  victor:    { name: 'Victor Mono',     css: "'Victor Mono', monospace" },
-  source:    { name: 'Source Code Pro', css: "'Source Code Pro', monospace" },
-  geist:     { name: 'Geist Mono',      css: "'Geist Mono', monospace" },
-};
-
-/* Cada prompt devuelve [línea superior | null, prefijo de la línea de comandos].
-   Usa los colores ANSI del tema: c0…c15, fg y bg. */
-const PROMPTS = {
-  h4ck3r: { name: 'h4ck3r', make: () => [
-    c('c2', '┌──[') + b('c10', 'Guyen') + c('c2', ']─[') + b('fg', '~/lab') + c('c2', ']─[') + b('c14', '⎇ main') + c('c2', ']'),
-    c('c2', '└─') + b('c10', '$') + ' '] },
-  kali: { name: 'Kali', make: () => [
-    c('c2', '┌──(') + b('c4', 'user㉿host') + c('c2', ')-[') + b('fg', '~/lab') + c('c2', ']'),
-    c('c2', '└─') + b('c4', '$') + ' '] },
-  powerline: { name: 'Powerline', make: () => [
-    roundSegs(['c4', 'bg', ' ~/lab '], ['c3', 'bg', ' ⎇ main '], ['c2', 'bg', ' ✔ ']),
-    b('c2', '❯') + ' '] },
-  pure: { name: 'Pure', make: () => [
-    c('c4', '~/lab') + ' ' + c('c8', 'main*'),
-    c('c5', '❯') + ' '] },
-  robby: { name: 'robbyrussell', make: () => [
-    null,
-    b('c2', '➜') + '  ' + b('c6', 'lab') + ' ' + b('c4', 'git:(') + b('c1', 'main') + b('c4', ')') + ' '] },
-};
-
-const CURSORS = { beam: 'Barra', block: 'Bloque', underline: 'Subrayado' };
-
-/* ══════════ hero y marquee ══════════ */
-const TOOLS = ['kitty', 'zsh', 'starship', 'tmux', 'fzf', 'fd', 'bat', 'eza', 'zoxide', 'oh-my-zsh', 'powerlevel10k', 'catppuccin',
-  'wezterm', 'fish', 'fisher', 'tide', 'ghostty', 'tokyo night', 'qterminal', 'zsh-autosuggestions', 'zsh-syntax-highlighting', 'nerd fonts',
-  'alacritty', 'gruvbox', 'dracula', 'pure', 'nushell', 'rosé pine', 'windows terminal', 'powershell', 'oh-my-posh'];
-
-const HERO_CMDS = ['starship preset catppuccin-powerline', 'kitty +kitten themes Catppuccin-Mocha', 'fisher install IlanCosman/tide@v6',
-  'p10k configure', 'ls | where size > 1kb', 'tmux new -s dev', 'oh-my-posh font install meslo', 'exec zsh'];

@@ -4,23 +4,38 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-A static, dependency-free showcase site (UI text in Spanish) that recreates terminal configurations (Kitty, WezTerm, Windows Terminal, etc.) purely in HTML/CSS, plus a "Lab" that lets visitors compose their own terminal and export the config. There is no build step, package manager, linter, or test suite.
+Showcase site (UI text in Spanish) that recreates terminal configurations (Kitty, WezTerm, Windows Terminal…) purely in HTML/CSS, plus a "Lab" where visitors compose their own terminal and export the config. Built with **Astro 7 + TypeScript (strict)**, deployed to Vercel. The pre-migration static version is preserved at git tag `v0-static`.
 
-**Run it:** open `index.html` directly, or serve the folder (e.g. `python3 -m http.server`) and visit the printed URL. Scripts are plain `<script>` tags (no modules), loaded in order: `js/data.js` then `js/app.js`.
+The migration plan (backend for saved Lab designs, tests, CI, Vercel) lives in `/home/naelsherin/.claude/plans/quiero-que-sea-una-functional-kahan.md`.
+
+## Commands
+
+```bash
+npm run dev       # dev server on http://localhost:4321
+npm run build     # static build to dist/
+npm run preview   # serve dist/
+npm run check     # astro check (typecheck .astro + .ts)
+```
+
+Requires Node 24 (`.nvmrc`). TypeScript is pinned to 6.x because `astro check` does not support TS 7 yet.
 
 ## Architecture
 
-- `js/data.js` — all content and the string-building helpers, as globals consumed by `app.js`:
-  - Helpers `c/b/it(colorKey, text)` produce colored/bold/italic `<span>`s (escaped via `esc`); `t` escapes plain text; `cur` is the cursor span. `segs`, `roundSegs`, `segsR` build powerline segments. A color key is either a palette variable name (`'green'` → `var(--green)`) or a literal `#hex`.
-  - `SETUPS` — array of setup objects: `id`, `name`, `vibes`, `tag`, `desc`, `window`, optional `chrome` (`'win'`/`'gnome'`, default mac), `font`, `palette` (becomes CSS custom properties on that terminal), `swatches`, `lines` (array of `[left, right?]` HTML strings), `specs`, `install` (shell script text shown in the Instalar tab). Adding a setup = adding one object here; the index, filters, counts, hero stats, command palette and prev/next navigation all derive from `SETUPS`.
-  - `VIBES` (filter chips), `THEMES` (Lab themes with `bg`, `fg`, 16 `ansi` colors), `FONTS`, `PROMPTS` (Lab prompts using `c0…c15`/`fg`/`bg` keys so they follow the chosen theme), `CURSORS`, `TOOLS` (marquee), `HERO_CMDS` (typing animation).
-- `js/app.js` — everything is rendered client-side from the data: `renderSetup` builds each section into `#setups`, then TOC, filters, marquee, hero effects, scroll reveal (`IntersectionObserver` + `data-reveal`), light/dark theme toggle (View Transitions API), CRT mode, command palette (Ctrl/⌘ K, fuzzy search), keyboard shortcuts (T, C, J/K), Lab rendering and export.
-- Lab export: `exportConfig` generates `kitty.conf` / `alacritty.toml` / ghostty output from the `lab` state; the state is also shareable via URL query params (`theme`, `font`, `prompt`, `cursor`, `size`) built in `shareUrl` and read back at startup.
-- `css/styles.css` — all styling. Terminals are themed via inline CSS custom properties (set from `palette`, `--font`, `--ff`, `--lh`, `--frame`, `--bar`); page theme uses `data-theme` / `data-mode` on `<html>` and a `crt` class.
-- Persistence: only `localStorage` keys `theme` and `crt`, wrapped in try/catch (`store`). An inline script in `<head>` applies them before first paint to avoid flashing — keep it in sync with `app.js` if the keys change.
+Content is rendered **at build time**; the browser only gets a small JS bundle for interactivity.
+
+- `src/data/` — all content. `setups.ts` (`SETUPS: Setup[]`, `VIBES`, and the shared prompt builders like `guyenTop`), `lab.ts` (`THEMES` with 16 ANSI colors, `FONTS`, `PROMPTS`, `CURSORS`, `SIZE`, `EXPORT_FORMATS`), `site.ts` (`TOOLS` marquee, `HERO_CMDS`). Adding a setup = one object in `SETUPS`; index, filters, counts, command palette and J/K navigation all derive from it.
+- `src/lib/` — pure, isomorphic helpers (usable in build and browser, unit-testable):
+  - `term.ts`: `c/b/it(colorKey, text)` build colored spans (escaped via `esc`), `segs/roundSegs/segsR` powerline segments, `renderLines`, `highlight`. A color key is a palette variable name (`'green'` → `var(--green)`) or a literal `#hex`.
+  - `design.ts`: the `Design` type (theme/font/prompt/cursor/size), `DEFAULT_DESIGN`, `normalizeDesign` (validates unknown input, falls back to defaults), query-param (de)serialization.
+  - `export.ts`: `exportConfig(design, fmt)` → kitty.conf / alacritty.toml / ghostty text.
+  - `fuzzy.ts`: command-palette matching (accent/case-insensitive, in-order letters).
+- `src/components/` — `Home.astro` composes the page (Nav, Hero, Index, Setup ×N, Lab, Footer, CommandPalette) and accepts an optional `design` prop that preloads the Lab. Each terminal's `palette` becomes inline CSS custom properties, so one stylesheet themes every setup.
+- `src/scripts/` — client modules, entry `main.ts` (init order + delegated click/keyboard handlers). `dom.ts` holds shared utils (`$`, `$$`, `store`, `toast`, `state.ready`). Client code must **not** import `src/data/setups.ts` (it would ship all content); it reads the `#setupsIndex` JSON embedded by `Home.astro` and `data-*` attributes instead. `lab.ts` reads its initial design from `#lab[data-design]`, or from legacy `?theme=…` query params if present.
+- `src/styles/global.css` — all styling (ported 1:1). Page theme uses `data-theme`/`data-mode` on `<html>` and a `crt` class; an `is:inline` script in `src/layouts/Base.astro` applies saved `theme`/`crt` from `localStorage` before first paint — keep it in sync with `scripts/theme.ts` if keys change.
+- Fonts are self-hosted via `@fontsource` (imported in `Base.astro`). Geist comes from the variable packages, so CSS family names are `'Geist Variable'` / `'Geist Mono Variable'`.
 
 ## Conventions
 
-- Respect `prefers-reduced-motion` (`reduced` flag in `app.js`) for any new animation.
+- Respect `prefers-reduced-motion` (`reduced` in `scripts/dom.ts`) for any new animation.
 - Nerd Font icons are intentionally replaced with plain Unicode glyphs; the site uses no images.
-- Insert user-visible dynamic strings through `esc()`; `lines`/`specs` fields are trusted HTML authored in `data.js`.
+- `lines`, `specs` and `status` fields in `setups.ts` are trusted HTML (rendered with `set:html`); everything else goes through Astro's escaping or `esc()`.
