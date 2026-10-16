@@ -38,6 +38,14 @@ No hace falta ninguna variable de entorno en local. En producción, `TURSO_DATAB
 Un solo test: `npx vitest run src/lib/export.test.ts` o `npx playwright test -g "enlace corto"`.
 La primera vez, Playwright necesita el navegador: `npx playwright install chromium`.
 
+## Despliegue
+
+Vercel despliega `main` en producción y cada PR en una URL de preview (integración de Git, sin pasos en GitHub Actions).
+
+- **Bases de datos:** dos bases de Turso, `prod` y `preview`, creadas desde el Marketplace de Vercel. `TURSO_DATABASE_URL` y `TURSO_AUTH_TOKEN` se asignan por entorno (Production y Preview), así que las previews nunca escriben en producción.
+- **Migraciones:** el build de Vercel (`vercel.json`) ejecuta `npm run db:migrate` antes de `npm run build`. Cada deploy migra su propia base de datos antes de publicar el código que la usa; si la migración falla, el deploy falla y sigue activa la versión anterior.
+- Las migraciones tienen que ser compatibles con el código anterior (añadir columnas o tablas, no renombrar ni borrar en el mismo paso): la base de preview es compartida por todos los PR.
+
 ## Estructura
 
 ```
