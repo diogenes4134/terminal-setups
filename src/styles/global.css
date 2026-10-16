@@ -1372,6 +1372,36 @@ button.copy.err {
   translate: -50% 0;
 }
 
+/* ══════════ autor ══════════ */
+.author {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 400px);
+  align-items: center;
+  gap: 48px;
+  padding-top: 140px;
+  scroll-margin-top: 40px;
+}
+.author .desc {
+  margin-bottom: 28px;
+}
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.social-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+@media (max-width: 760px) {
+  .author {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding-top: 110px;
+  }
+}
+
 /* ══════════ cierre y footer ══════════ */
 .outro {
   text-align: center;
@@ -1408,6 +1438,24 @@ footer {
 }
 .foot a {
   text-decoration: none;
+}
+.foot-by {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.foot-icon {
+  display: inline-grid;
+  place-items: center;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.foot-icon:hover {
+  color: var(--ink);
+}
+.foot-icon .social-icon {
+  width: 16px;
+  height: 16px;
 }
 
 /* ══════════ menos movimiento ══════════ */

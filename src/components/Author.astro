@@ -1,0 +1,48 @@
+---
+import SocialIcon from './SocialIcon.astro';
+import { AUTHOR } from '../data/author';
+import { themeVars } from '../lib/demo';
+import { b, c, cur, renderLines, t } from '../lib/term';
+
+// `whoami` en una terminal Tokyo Night: decorativa, los enlaces de verdad son los botones
+const prompt = c('c2', '❯ ');
+const lines = renderLines([
+  [prompt + t('whoami')],
+  [b('fg', AUTHOR.name.toLowerCase())],
+  [''],
+  [prompt + t('cat ~/.links')],
+  ...AUTHOR.links.map(l => [c('c5', l.id.padEnd(11)) + c('c4', `@${l.handle}`)] as [string]),
+  [''],
+  [prompt + cur],
+]);
+---
+
+<section class="author wrap" id="autor" data-reveal>
+  <div class="author-copy">
+    <span class="label">Autor</span>
+    <h2>Hecho por {AUTHOR.name}.</h2>
+    <p class="desc">{AUTHOR.bio}</p>
+    <div class="socials">
+      {AUTHOR.links.map(l => (
+        <a class="btn btn-ghost" href={l.url} target="_blank" rel="me noopener noreferrer" title={`@${l.handle}`}>
+          <SocialIcon id={l.id} />
+          {l.label}
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <div class="term author-term" style={`${themeVars('tokyonight')};--font:'JetBrains Mono', monospace`} aria-hidden="true">
+    <div class="term-bar">
+      <span class="dots">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+      <span class="term-title">~ — zsh</span>
+    </div>
+    <div class="term-body">
+      <div class="lines" set:html={lines} />
+    </div>
+  </div>
+</section>
