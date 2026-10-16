@@ -57,6 +57,7 @@ Content is rendered **at build time**; the browser only gets a small JS bundle f
   - Data logic lives in `src/server/designs.ts` and takes the `db` as a parameter, so tests can pass an in-memory database. Request validation uses the strict Zod `designSchema` (`lib/design.ts`); `normalizeDesign` is the lenient variant for URL params.
   - Ids: `lib/ids.ts` (7 chars, unambiguous alphabet, `ID_PATTERN` validated before querying).
   - Client: "Copiar enlace" calls `shortLink()` in `scripts/lab.ts` (falls back to the long `?theme=…` URL if the API fails); `copyInstall` accepts a `Promise<string>` and uses `ClipboardItem` so Safari keeps the click's user activation.
+  - Deploy: Vercel Git integration (prod from `main`, previews per PR). `vercel.json` sets the build command to `db:migrate && build`, so each deploy migrates its own Turso DB (Production → prod, Preview → preview) before shipping code. `drizzle.config.ts` refuses to fall back to `file:local.db` on Vercel. Keep migrations backward-compatible; the preview DB is shared by all PRs.
   - `/s/[id]` cannot `Astro.rewrite('/404')` (prerendered target → ForbiddenRewrite); it returns an empty 404 `Response`, which Astro fills with `src/pages/404.astro`.
 - Fonts are self-hosted via `@fontsource` (imported in `Base.astro`). Geist comes from the variable packages, so CSS family names are `'Geist Variable'` / `'Geist Mono Variable'`.
 

@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Configuraciones de terminal recreadas en HTML/CSS, con un laboratorio para diseñar la tuya.",
   "engines": {
-    "node": ">=24"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "astro dev",
