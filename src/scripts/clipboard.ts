@@ -7,10 +7,13 @@ export function flash(button: HTMLElement, label: string, cls: 'ok' | 'err') {
   button.textContent = label;
   button.classList.add(cls);
   clearTimeout(timers.get(button));
-  timers.set(button, window.setTimeout(() => {
-    button.textContent = button.dataset.label!;
-    button.classList.remove(cls);
-  }, 1600));
+  timers.set(
+    button,
+    window.setTimeout(() => {
+      button.textContent = button.dataset.label!;
+      button.classList.remove(cls);
+    }, 1600),
+  );
 }
 
 /**

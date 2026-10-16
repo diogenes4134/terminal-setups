@@ -30,7 +30,9 @@ export const segs = (...items: Seg[]) => powerline(items, false);
 export const roundSegs = (...items: Seg[]) => powerline(items, true);
 export const segsR = (...items: Seg[]) =>
   `<span class="segs">${items
-    .map(([bg, fg, text], i) => `<span class="seg-r" style="--sb:${col(bg)};color:${col(fg)};z-index:${i + 1}">${esc(text)}</span>`)
+    .map(
+      ([bg, fg, text], i) => `<span class="seg-r" style="--sb:${col(bg)};color:${col(fg)};z-index:${i + 1}">${esc(text)}</span>`,
+    )
     .join('')}</span>`;
 
 export const renderLines = (lines: Line[]) =>

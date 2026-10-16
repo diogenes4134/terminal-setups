@@ -9,11 +9,13 @@ import { goTo } from './navigation';
    Ciclo: escribir el comando con el tema actual → "Enter" → el tema cambia (transición CSS)
    y aparece la paleta → pausa → siguiente tema. Se pausa fuera de pantalla. */
 
-const term = $('#demoTerm'), linesEl = $('#demoLines'), title = $('#demoTitle');
+const term = $('#demoTerm'),
+  linesEl = $('#demoLines'),
+  title = $('#demoTitle');
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
-let index = 0;            // tema mostrado (posición en DEMO_THEMES)
-let run = 0;              // cada ciclo nuevo invalida el anterior
+let index = 0; // tema mostrado (posición en DEMO_THEMES)
+let run = 0; // cada ciclo nuevo invalida el anterior
 let visible = true;
 
 function show(theme: ThemeKey, prompt: number, typed: string, applied: boolean) {
@@ -58,7 +60,9 @@ async function loop(start: number) {
 }
 
 export function initDemo() {
-  new IntersectionObserver(([e]) => { visible = !!e?.isIntersecting; }).observe(term);
+  new IntersectionObserver(([e]) => {
+    visible = !!e?.isIntersecting;
+  }).observe(term);
 
   // elegir un tema a mano: se aplica al momento y el ciclo sigue desde ahí
   $('#demoThemes').addEventListener('click', e => {

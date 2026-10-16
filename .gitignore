@@ -21,3 +21,6 @@ coverage/
 *.log
 .vscode/*
 !.vscode/extensions.json
+
+# base de datos de los tests e2e
+e2e.db*

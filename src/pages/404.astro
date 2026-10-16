@@ -5,22 +5,55 @@ import Base from '../layouts/Base.astro';
 <Base title="No encontrado · Terminal Setups">
   <main class="wrap not-found">
     <div class="term" style="--bg:#0a0a0a;--fg:#fafafa;--font:'Geist Mono Variable', monospace">
-      <div class="term-bar"><span class="dots"><i></i><i></i><i></i></span><span class="term-title">zsh</span></div>
+      <div class="term-bar">
+        <span class="dots">
+          <i></i>
+          <i></i>
+          <i></i>
+        </span>
+        <span class="term-title">zsh</span>
+      </div>
       <div class="term-body">
-        <div class="ln"><span><span style="color:#22c55e">❯</span> cd {Astro.url.pathname}</span></div>
-        <div class="ln"><span>cd: no such file or directory: {Astro.url.pathname}</span></div>
-        <div class="ln"><span><span style="color:#22c55e">❯</span> <span class="cursor"></span></span></div>
+        <div class="ln">
+          <span>
+            <span style="color:#22c55e">❯</span> cd {Astro.url.pathname}
+          </span>
+        </div>
+        <div class="ln">
+          <span>cd: no such file or directory: {Astro.url.pathname}</span>
+        </div>
+        <div class="ln">
+          <span>
+            <span style="color:#22c55e">❯</span> <span class="cursor"></span>
+          </span>
+        </div>
       </div>
     </div>
     <h1>404</h1>
     <p class="desc">Esta página no existe, o el diseño compartido ya no está disponible.</p>
-    <a class="btn" href="/">Volver al inicio</a>
+    <a class="btn" href="/">
+      Volver al inicio
+    </a>
   </main>
 </Base>
 
 <style>
-  .not-found { padding-top: 18vh; padding-bottom: 80px; }
-  .not-found h1 { margin: 40px 0 0; font-weight: 400; font-size: 64px; letter-spacing: -.03em; line-height: 1; }
-  .not-found .ln { clip-path: none; }
-  .not-found .btn { margin-top: 0; text-decoration: none; }
+  .not-found {
+    padding-top: 18vh;
+    padding-bottom: 80px;
+  }
+  .not-found h1 {
+    margin: 40px 0 0;
+    font-weight: 400;
+    font-size: 64px;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .not-found .ln {
+    clip-path: none;
+  }
+  .not-found .btn {
+    margin-top: 0;
+    text-decoration: none;
+  }
 </style>

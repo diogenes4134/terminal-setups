@@ -7,7 +7,16 @@ import { b, c, cur, t, type Line } from './term';
 export type ThemeKey = keyof typeof THEMES;
 export type PromptKey = keyof typeof PROMPTS;
 
-export const DEMO_THEMES: ThemeKey[] = ['catppuccin', 'tokyonight', 'gruvbox', 'dracula', 'rosepine', 'nord', 'ubuntu', 'campbell'];
+export const DEMO_THEMES: ThemeKey[] = [
+  'catppuccin',
+  'tokyonight',
+  'gruvbox',
+  'dracula',
+  'rosepine',
+  'nord',
+  'ubuntu',
+  'campbell',
+];
 export const DEMO_PROMPTS: PromptKey[] = ['powerline', 'pure', 'h4ck3r', 'robby', 'kali'];
 
 /** Número fijo de líneas: la ventana no cambia de alto entre pasos. */
@@ -31,11 +40,15 @@ export function demoLines(theme: ThemeKey, prompt: PromptKey, typed: string, app
   const blocks = (from: number) => Array.from({ length: 8 }, (_, i) => c(`c${from + i}`, '███')).join(' ');
 
   const lines = withPrompt(t(typed) + (applied ? '' : cur));
-  if (applied) lines.push(
-    [c('c2', '✓ ') + t('tema aplicado: ') + b('fg', THEMES[theme].name)],
-    [''], [blocks(0)], [blocks(8)], [''],
-    ...withPrompt(cur),
-  );
+  if (applied)
+    lines.push(
+      [c('c2', '✓ ') + t('tema aplicado: ') + b('fg', THEMES[theme].name)],
+      [''],
+      [blocks(0)],
+      [blocks(8)],
+      [''],
+      ...withPrompt(cur),
+    );
   while (lines.length < ROWS) lines.push(['']);
   return lines;
 }

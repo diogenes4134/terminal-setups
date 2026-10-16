@@ -44,7 +44,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:card" content="summary" />
     <script is:inline>
       // aplica el modo CRT guardado antes de pintar (evita el parpadeo)
-      try { if (localStorage.getItem('crt') === '1') document.documentElement.classList.add('crt'); } catch (e) {}
+      try {
+        if (localStorage.getItem('crt') === '1') document.documentElement.classList.add('crt');
+      } catch {
+        /* sin almacenamiento */
+      }
     </script>
   </head>
   <body>

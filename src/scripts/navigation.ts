@@ -17,7 +17,7 @@ export function applyFilter(v: string) {
     $('#count').textContent = `${pad(n)} / ${pad(SETUPS_INDEX.length)}`;
   };
   if (!document.startViewTransition || reduced || !state.ready) return run();
-  root.classList.add('vt');   // nombres de transición solo mientras se filtra
+  root.classList.add('vt'); // nombres de transición solo mientras se filtra
   document.startViewTransition(run).finished.finally(() => root.classList.remove('vt'));
 }
 
@@ -31,9 +31,8 @@ export function goTo(id: string) {
 
 export function stepSetup(dir: 1 | -1) {
   const secs = $$('section.setup:not([hidden])');
-  const target = dir > 0
-    ? secs.find(s => s.getBoundingClientRect().top > 60)
-    : secs.filter(s => s.getBoundingClientRect().top < -20).pop();
+  const target =
+    dir > 0 ? secs.find(s => s.getBoundingClientRect().top > 60) : secs.filter(s => s.getBoundingClientRect().top < -20).pop();
   if (!target) return toast(dir > 0 ? 'Ya estás en la última' : 'Ya estás en la primera');
   target.scrollIntoView({ behavior });
   toast(SETUPS_INDEX.find(s => s.id === target.id)?.name ?? '');

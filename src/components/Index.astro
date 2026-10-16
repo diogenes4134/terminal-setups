@@ -2,7 +2,9 @@
 import { SETUPS, VIBES } from '../data/setups';
 import { pad } from '../lib/term';
 
-const counts = Object.keys(VIBES).map(k => (k === 'all' ? SETUPS.length : SETUPS.filter(s => (s.vibes as string[]).includes(k)).length));
+const counts = Object.keys(VIBES).map(k =>
+  k === 'all' ? SETUPS.length : SETUPS.filter(s => (s.vibes as string[]).includes(k)).length,
+);
 ---
 
 <section class="index wrap" id="indice" data-reveal>
@@ -11,10 +13,15 @@ const counts = Object.keys(VIBES).map(k => (k === 'all' ? SETUPS.length : SETUPS
   <div class="filter-row">
     <div class="filters" id="filters" role="toolbar" aria-label="Filtrar por estilo">
       {Object.entries(VIBES).map(([k, v], i) => (
-        <button class="chip" data-v={k} aria-pressed={k === 'all'}>{v}<sup>{counts[i]}</sup></button>
+        <button class="chip" data-v={k} aria-pressed={k === 'all'}>
+          {v}
+          <sup>{counts[i]}</sup>
+        </button>
       ))}
     </div>
-    <span class="count" id="count">{pad(SETUPS.length)} / {pad(SETUPS.length)}</span>
+    <span class="count" id="count">
+      {pad(SETUPS.length)} / {pad(SETUPS.length)}
+    </span>
   </div>
   <ol id="toc">
     {SETUPS.map((s, i) => (
@@ -23,9 +30,15 @@ const counts = Object.keys(VIBES).map(k => (k === 'all' ? SETUPS.length : SETUPS
           <span class="n">{pad(i + 1)}</span>
           <span class="name">{s.name}</span>
           <span class="meta">
-            <span class="mini">{s.swatches.slice(2, 8).map((h, k) => <i style={`--s:${h};--k:${k}`}></i>)}</span>
+            <span class="mini">
+              {s.swatches.slice(2, 8).map((h, k) => (
+                <i style={`--s:${h};--k:${k}`}></i>
+              ))}
+            </span>
             <span class="tag">{s.tag}</span>
-            <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3 8h10M9 4l4 4-4 4" />
+            </svg>
           </span>
         </a>
       </li>

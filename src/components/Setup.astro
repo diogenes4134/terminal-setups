@@ -9,18 +9,35 @@ interface Props {
 const { setup: s, index: i } = Astro.props;
 
 // la paleta y la tipografía de cada terminal viajan como variables CSS
-const vars = Object.entries(s.palette).map(([k, v]) => `--${k}:${v}`)
-  .concat(`--font:${s.font}`, `--ff:${s.ff || 'normal'}`, `--lh:${s.lh || 1.55}`, `--cw:${s.cw || '2px'}`,
-    s.frame ? `--frame:${s.frame}` : '', s.bar ? `--bar:${s.bar}` : '')
-  .filter(Boolean).join(';');
+const vars = Object.entries(s.palette)
+  .map(([k, v]) => `--${k}:${v}`)
+  .concat(
+    `--font:${s.font}`,
+    `--ff:${s.ff || 'normal'}`,
+    `--lh:${s.lh || 1.55}`,
+    `--cw:${s.cw || '2px'}`,
+    s.frame ? `--frame:${s.frame}` : '',
+    s.bar ? `--bar:${s.bar}` : '',
+  )
+  .filter(Boolean)
+  .join(';');
 ---
 
 <section class="setup" id={s.id} data-vibes={s.vibes.join(' ')} data-reveal style={`--vtn:v-${s.id}`}>
-  <div class="rule"><span class="label">{pad(i + 1)} / {pad(SETUPS.length)}</span><span class="label">{s.tag}</span></div>
+  <div class="rule">
+    <span class="label">
+      {pad(i + 1)} / {pad(SETUPS.length)}
+    </span>
+    <span class="label">{s.tag}</span>
+  </div>
   <div class="setup-head">
     <h3>{s.name}</h3>
     {s.mine && <span class="badge">mi setup</span>}
-    <span class="vibes">{s.vibes.map(v => <span>{VIBES[v].toLowerCase()}</span>)}</span>
+    <span class="vibes">
+      {s.vibes.map(v => (
+        <span>{VIBES[v].toLowerCase()}</span>
+      ))}
+    </span>
   </div>
   <p class="desc">{s.desc}</p>
 
@@ -28,44 +45,78 @@ const vars = Object.entries(s.palette).map(([k, v]) => `--${k}:${v}`)
     <div class="term-bar">
       {s.chrome === 'win' ? (
         <>
-          <span class="win-tab">{s.window}</span><span class="win-plus">+</span>
-          <span class="win-ctl"><i>—</i><i>▢</i><i>✕</i></span>
+          <span class="win-tab">{s.window}</span>
+          <span class="win-plus">+</span>
+          <span class="win-ctl">
+            <i>—</i>
+            <i>▢</i>
+            <i>✕</i>
+          </span>
         </>
       ) : s.chrome === 'gnome' ? (
         <>
-          <span class="term-title">{s.window}</span><span class="gnome-ctl"><i>≡</i><i>✕</i></span>
+          <span class="term-title">{s.window}</span>
+          <span class="gnome-ctl">
+            <i>≡</i>
+            <i>✕</i>
+          </span>
         </>
       ) : (
         <>
-          <span class="dots"><i></i><i></i><i></i></span><span class="term-title">{s.window}</span>
+          <span class="dots">
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
+          <span class="term-title">{s.window}</span>
         </>
       )}
     </div>
-    <div class="term-body"><div class="lines" set:html={renderLines(s.lines)} /></div>
-    {s.status && <div class="tmux"><span set:html={s.status[0]} /><span>{s.status[1]}</span></div>}
+    <div class="term-body">
+      <div class="lines" set:html={renderLines(s.lines)} />
+    </div>
+    {s.status && (
+      <div class="tmux">
+        <span set:html={s.status[0]} />
+        <span>{s.status[1]}</span>
+      </div>
+    )}
   </div>
 
   <div class="toolbar">
     <div class="swatches" aria-label="Paleta">
-      {s.swatches.map(h => <button style={`--s:${h}`} data-hex={h} aria-label={h}></button>)}
+      {s.swatches.map(h => (
+        <button style={`--s:${h}`} data-hex={h} aria-label={h}></button>
+      ))}
       <span class="hex">{s.swatches[0]}</span>
     </div>
     <div class="tabs" role="tablist">
-      <button role="tab" aria-selected="true" data-tab="specs">Detalles</button>
-      <button role="tab" aria-selected="false" data-tab="install">Instalar</button>
+      <button role="tab" aria-selected="true" data-tab="specs">
+        Detalles
+      </button>
+      <button role="tab" aria-selected="false" data-tab="install">
+        Instalar
+      </button>
     </div>
   </div>
 
   <div class="panel on" data-panel="specs">
     <dl class="specs">
-      {s.specs.map(([k, v]) => <><dt>{k}</dt><dd set:html={v} /></>)}
+      {s.specs.map(([k, v]) => (
+        <>
+          <dt>{k}</dt>
+          <dd set:html={v} />
+        </>
+      ))}
     </dl>
   </div>
   <div class="panel" data-panel="install">
     <div class="install">
       <div class="install-head">
         <span class="label">{s.chrome === 'win' ? 'powershell' : 'bash'}</span>
-        <button class="copy" data-copy="install">Copiar</button>
+        <button class="copy" data-copy="install">
+          Copiar
+        </button>
       </div>
       <pre set:html={highlight(s.install)} />
     </div>

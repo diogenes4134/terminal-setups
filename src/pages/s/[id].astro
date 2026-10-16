@@ -15,7 +15,10 @@ if (!design) return new Response(null, { status: 404, statusText: 'Not Found' })
 const label = designLabel(design);
 ---
 
-<Base title={`${label} · Terminal Setups`} description={`Diseño de terminal compartido: ${label}. Ábrelo en el laboratorio y exporta la configuración para kitty, Alacritty o Ghostty.`}>
+<Base
+  title={`${label} · Terminal Setups`}
+  description={`Diseño de terminal compartido: ${label}. Ábrelo en el laboratorio y exporta la configuración para kitty, Alacritty o Ghostty.`}
+>
   <Home design={design} />
 </Base>
 <script>

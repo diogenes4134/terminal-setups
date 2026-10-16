@@ -23,7 +23,9 @@ const index = SETUPS.map(({ id, name, tag }) => ({ id, name, tag }));
   <Hero />
   <Index />
   <div class="wrap" id="setups">
-    {SETUPS.map((setup, i) => <Setup setup={setup} index={i} />)}
+    {SETUPS.map((setup, i) => (
+      <Setup setup={setup} index={i} />
+    ))}
   </div>
   <Lab design={design} />
 </main>

@@ -11,16 +11,30 @@ The migration plan (backend for saved Lab designs, tests, CI, Vercel) lives in `
 ## Commands
 
 ```bash
-npm run dev       # dev server on http://localhost:4321
-npm run build     # static build to dist/
-npm run preview   # serve dist/
-npm run check     # astro check (typecheck .astro + .ts)
-npm run db:migrate   # apply drizzle/ migrations (local: creates/updates local.db)
-npm run db:generate  # create a new migration after editing src/db/schema.ts
-npm run db:studio    # browse the database
+npm run dev            # dev server on http://localhost:4321
+npm run build          # production build (Vercel output in .vercel/output)
+npm run check          # astro check (typecheck .astro + .ts)
+npm run lint           # ESLint (flat config, typescript-eslint + eslint-plugin-astro)
+npm run format         # Prettier --write (format:check in CI); src/data/ is excluded on purpose
+npm test               # Vitest: unit + API tests against an in-memory SQLite
+npm run test:e2e       # Playwright (desktop + mobile Chromium); starts its own dev server on :4323 with e2e.db
+npm run db:migrate     # apply drizzle/ migrations (local: creates/updates local.db)
+npm run db:generate    # create a new migration after editing src/db/schema.ts
+npx vitest run src/lib/export.test.ts      # one unit test file
+npx playwright test -g "enlace corto"      # one e2e test by name
 ```
 
-Requires Node 24 (`.nvmrc`). TypeScript is pinned to 6.x because `astro check` does not support TS 7 yet. Run `npm run db:migrate` once before `npm run dev`. `astro preview` does not work with the Vercel adapter; use `npm run dev` to exercise API routes.
+Requires Node 24 (`.nvmrc`). TypeScript is pinned to 6.x because `astro check` and typescript-eslint do not support TS 7 yet. Run `npm run db:migrate` once before `npm run dev`. `astro preview` does not work with the Vercel adapter; use `npm run dev` to exercise API routes.
+
+Astro 7 auto-backgrounds `astro dev` when it detects an AI agent (stop it with `npx astro dev stop`); `--ignore-lock` forces the foreground, which is why the Playwright `webServer` uses it.
+
+CI (`.github/workflows/ci.yml`) runs on every PR and push to `main`: lint → format:check → check → test → build, and Playwright in a parallel job (report uploaded on failure).
+
+## Testing notes
+
+- Never put test files under `src/pages/`: Astro turns every `.ts` there into a public route. API tests live in `src/test/` and mock `src/db/client` (which reads `astro:env`) with an in-memory DB from `src/test/db.ts` (`createTestDb`, runs the real migrations).
+- `src/db/connect.ts` (`createDb`) is the env-free connection factory; `src/db/client.ts` is the app instance.
+- E2E tests import `test`/`expect` from `tests/e2e/fixtures.ts`, whose auto fixture fails a test on any uncaught page error.
 
 ## Architecture
 

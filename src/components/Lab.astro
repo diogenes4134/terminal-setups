@@ -19,11 +19,23 @@ const groups = [
 <section class="lab wrap" id="lab" data-reveal data-design={JSON.stringify(design)}>
   <span class="label">Laboratorio</span>
   <h2>Diseña tu propia terminal.</h2>
-  <p class="desc">Combina tema, fuente, prompt y cursor. La vista previa cambia en directo y puedes exportar la configuración o compartir el enlace.</p>
+  <p class="desc">
+    Combina tema, fuente, prompt y cursor. La vista previa cambia en directo y puedes exportar la configuración o compartir el
+    enlace.
+  </p>
 
   <div class="term lab-term" id="labTerm" role="img" aria-label="Vista previa del laboratorio">
-    <div class="term-bar"><span class="dots"><i></i><i></i><i></i></span><span class="term-title" id="labTitle"></span></div>
-    <div class="term-body"><div class="lines" id="labLines"></div></div>
+    <div class="term-bar">
+      <span class="dots">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+      <span class="term-title" id="labTitle"></span>
+    </div>
+    <div class="term-body">
+      <div class="lines" id="labLines"></div>
+    </div>
   </div>
 
   <div class="lab-controls" id="labControls">
@@ -43,7 +55,15 @@ const groups = [
     <div class="ctl">
       <span>Tamaño</span>
       <div>
-        <input type="range" id="labSize" min={SIZE.min} max={SIZE.max} step="1" value={design.size} aria-label="Tamaño de fuente" />
+        <input
+          type="range"
+          id="labSize"
+          min={SIZE.min}
+          max={SIZE.max}
+          step="1"
+          value={design.size}
+          aria-label="Tamaño de fuente"
+        />
         <output id="labSizeOut">{design.size} px</output>
       </div>
     </div>
@@ -53,12 +73,18 @@ const groups = [
     <div class="install-head">
       <div class="tabs tabs-3" id="exportTabs" role="tablist">
         {Object.entries(EXPORT_FORMATS).map(([k, v], i) => (
-          <button role="tab" aria-selected={i === 0} data-fmt={k}>{v}</button>
+          <button role="tab" aria-selected={i === 0} data-fmt={k}>
+            {v}
+          </button>
         ))}
       </div>
       <div class="export-actions">
-        <button class="copy" data-copy="link">Copiar enlace</button>
-        <button class="copy" data-copy="lab">Copiar</button>
+        <button class="copy" data-copy="link">
+          Copiar enlace
+        </button>
+        <button class="copy" data-copy="lab">
+          Copiar
+        </button>
       </div>
     </div>
     <pre id="labExport"></pre>

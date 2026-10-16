@@ -27,34 +27,59 @@ export function shortLink(): Promise<string> {
     link = fetch('/api/designs', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(lab) })
       .then(res => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
       .then((data: { url: string }) => data.url)
-      .catch(() => { shortLinks.delete(key); return shareUrl(); });
+      .catch(() => {
+        shortLinks.delete(key);
+        return shareUrl();
+      });
     shortLinks.set(key, link);
   }
   return link;
 }
 
 export function renderLab() {
-  const th = THEMES[lab.theme], f = FONTS[lab.font];
+  const th = THEMES[lab.theme],
+    f = FONTS[lab.font];
   const [top, pre] = PROMPTS[lab.prompt].make();
   const term = $('#labTerm');
-  term.setAttribute('style', [`--bg:${th.bg}`, `--fg:${th.fg}`, ...th.ansi.map((h, i) => `--c${i}:${h}`),
-    `--font:${f.css}`, `--fs:${lab.size}px`].join(';'));
+  term.setAttribute(
+    'style',
+    [`--bg:${th.bg}`, `--fg:${th.fg}`, ...th.ansi.map((h, i) => `--c${i}:${h}`), `--font:${f.css}`, `--fs:${lab.size}px`].join(
+      ';',
+    ),
+  );
   term.dataset.cursor = lab.cursor;
 
   const prompt = (cmd: string): Line[] => (top ? [[top] as Line] : []).concat([[pre + cmd]]);
-  const ls = b('c4', 'src/') + '  ' + b('c4', 'docs/') + '  ' + c('c2', 'build.sh') + '  ' + t('README.md') + '  ' + c('c1', 'old.tar.gz');
-  const blocks = (from: number) => th.ansi.slice(from, from + 8).map((_, i) => c(`c${from + i}`, '███')).join(' ');
+  const ls =
+    b('c4', 'src/') + '  ' + b('c4', 'docs/') + '  ' + c('c2', 'build.sh') + '  ' + t('README.md') + '  ' + c('c1', 'old.tar.gz');
+  const blocks = (from: number) =>
+    th.ansi
+      .slice(from, from + 8)
+      .map((_, i) => c(`c${from + i}`, '███'))
+      .join(' ');
   $('#labLines').innerHTML = renderLines([
-    ...prompt(t('ls')), [ls], [''],
-    ...prompt(t('colors')), [blocks(0)], [blocks(8)], [''],
+    ...prompt(t('ls')),
+    [ls],
+    [''],
+    ...prompt(t('colors')),
+    [blocks(0)],
+    [blocks(8)],
+    [''],
     ...prompt(cur),
   ]);
   $('#labTitle').textContent = designLabel(lab);
   $('#labSizeOut').textContent = `${lab.size} px`;
   $<HTMLInputElement>('#labSize').value = String(lab.size);
-  $$('#labControls .chip').forEach(ch => ch.setAttribute('aria-pressed', String(lab[ch.dataset.group as keyof Design] === ch.dataset.value)));
+  $$('#labControls .chip').forEach(ch =>
+    ch.setAttribute('aria-pressed', String(lab[ch.dataset.group as keyof Design] === ch.dataset.value)),
+  );
   $('#labExport').innerHTML = highlight(currentExport());
-  if (state.ready) try { history.replaceState(null, '', shareUrl()); } catch { /* p. ej. file:// */ }
+  if (state.ready)
+    try {
+      history.replaceState(null, '', shareUrl());
+    } catch {
+      /* p. ej. file:// */
+    }
 }
 
 export function setLab<K extends keyof Design>(key: K, value: Design[K]) {
