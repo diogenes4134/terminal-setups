@@ -1,0 +1,92 @@
+---
+import { CURSORS, EXPORT_FORMATS, FONTS, PROMPTS, SIZE, THEMES } from '../data/lab';
+import { DEFAULT_DESIGN, type Design } from '../lib/design';
+
+interface Props {
+  /** diseño con el que arranca el laboratorio (p. ej. al abrir un enlace compartido) */
+  design?: Design;
+}
+const { design = DEFAULT_DESIGN } = Astro.props;
+
+const groups = [
+  { key: 'theme', label: 'Tema', options: Object.entries(THEMES).map(([k, v]) => ({ k, name: v.name, sw: [v.bg, v.ansi[5]] })) },
+  { key: 'font', label: 'Fuente', options: Object.entries(FONTS).map(([k, v]) => ({ k, name: v.name, css: v.css })) },
+  { key: 'prompt', label: 'Prompt', options: Object.entries(PROMPTS).map(([k, v]) => ({ k, name: v.name })) },
+  { key: 'cursor', label: 'Cursor', options: Object.entries(CURSORS).map(([k, v]) => ({ k, name: v })) },
+] as const;
+---
+
+<section class="lab wrap" id="lab" data-reveal data-design={JSON.stringify(design)}>
+  <span class="label">Laboratorio</span>
+  <h2>Diseña tu propia terminal.</h2>
+  <p class="desc">
+    Combina tema, fuente, prompt y cursor. La vista previa cambia en directo y puedes exportar la configuración o compartir el
+    enlace.
+  </p>
+
+  <div class="term lab-term" id="labTerm" role="img" aria-label="Vista previa del laboratorio">
+    <div class="term-bar">
+      <span class="dots">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+      <span class="term-title" id="labTitle"></span>
+    </div>
+    <div class="term-body">
+      <div class="lines" id="labLines"></div>
+    </div>
+  </div>
+
+  <div class="lab-controls" id="labControls">
+    {groups.map(g => (
+      <div class="ctl">
+        <span>{g.label}</span>
+        <div class="opts">
+          {g.options.map(o => (
+            <button class="chip" data-group={g.key} data-value={o.k} aria-pressed={design[g.key] === o.k}>
+              {'sw' in o && <span class="sw" style={`--a:${o.sw[0]};--b:${o.sw[1]}`}></span>}
+              {'css' in o ? <span style={`font-family:${o.css}`}>{o.name}</span> : o.name}
+            </button>
+          ))}
+        </div>
+      </div>
+    ))}
+    <div class="ctl">
+      <span>Tamaño</span>
+      <div>
+        <input
+          type="range"
+          id="labSize"
+          min={SIZE.min}
+          max={SIZE.max}
+          step="1"
+          value={design.size}
+          aria-label="Tamaño de fuente"
+        />
+        <output id="labSizeOut">{design.size} px</output>
+      </div>
+    </div>
+  </div>
+
+  <div class="install lab-export">
+    <div class="install-head">
+      <div class="tabs tabs-3" id="exportTabs" role="tablist">
+        {Object.entries(EXPORT_FORMATS).map(([k, v], i) => (
+          <button role="tab" aria-selected={i === 0} data-fmt={k}>
+            {v}
+          </button>
+        ))}
+      </div>
+      <div class="export-actions">
+        <button class="copy" data-copy="link">
+          Copiar enlace
+        </button>
+        <button class="copy" data-copy="lab">
+          Copiar
+        </button>
+      </div>
+    </div>
+    <pre id="labExport"></pre>
+  </div>
+</section>

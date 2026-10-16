@@ -1,0 +1,10 @@
+dist/
+.astro/
+.vercel/
+drizzle/
+playwright-report/
+test-results/
+package-lock.json
+**/__snapshots__/
+# datos alineados a mano en columnas (paletas, prompts, setups)
+src/data/

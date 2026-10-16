@@ -1,0 +1,38 @@
+---
+import CommandPalette from './CommandPalette.astro';
+import Footer from './Footer.astro';
+import Hero from './Hero.astro';
+import Index from './Index.astro';
+import Lab from './Lab.astro';
+import Nav from './Nav.astro';
+import Setup from './Setup.astro';
+import { SETUPS } from '../data/setups';
+import type { Design } from '../lib/design';
+
+interface Props {
+  design?: Design;
+}
+const { design } = Astro.props;
+
+// lo mínimo que necesita el cliente (paleta de comandos, J/K), sin enviar todo el contenido
+const index = SETUPS.map(({ id, name, tag }) => ({ id, name, tag }));
+---
+
+<Nav />
+<main id="top">
+  <Hero />
+  <Index />
+  <div class="wrap" id="setups">
+    {SETUPS.map((setup, i) => (
+      <Setup setup={setup} index={i} />
+    ))}
+  </div>
+  <Lab design={design} />
+</main>
+<Footer />
+<CommandPalette />
+
+<script type="application/json" id="setupsIndex" set:html={JSON.stringify(index)} />
+<script>
+  import '../scripts/main';
+</script>
